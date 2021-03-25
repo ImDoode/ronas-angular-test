@@ -1,48 +1,55 @@
 
 <load-indicator *ngIf="isLoad"></load-indicator>
 <div class="wrapper">
-  <div class="city__container">
-    <div class="city__name" *ngIf="!isCitySearchActive">{{ currentWeatherData?.name }}</div>
-    <div class="city__details" *ngIf="!isCitySearchActive">
-      <button class="city__button" type="button" (click)="isCitySearchActive = true">Сменить город</button>
-      <button class="city__button city__button--location-icon" type="button" (click)="loadCurrentGeoWeather()">Мое местоположение</button>
+  <div class="wrapper__top">
+    <div class="city__container">
+      <div class="city__name" *ngIf="!isCitySearchActive">{{ currentWeatherData?.name }}</div>
+      <div class="city__details" *ngIf="!isCitySearchActive">
+        <button class="city__button" type="button" (click)="isCitySearchActive = true">Сменить город</button>
+        <button class="city__button city__button--location-icon" type="button" (click)="loadCurrentGeoWeather()">Мое местоположение</button>
+      </div>
+      <div class="city__search" *ngIf="isCitySearchActive">
+        <input class="city__search-input" type="text" [(ngModel)]="citySearchQuery">
+        <button class="city__search-submit" (click)="onCitySearchSubmit()">OK</button>
+      </div>
     </div>
-    <div class="city__search" *ngIf="isCitySearchActive">
-      <input class="city__search-input" type="text" [(ngModel)]="citySearchQuery">
-      <button class="city__search-submit" (click)="onCitySearchSubmit()">OK</button>
+    
+    <div class="degress__container">
+      <span class="degress__label">º</span>
+      <div class="degress__buttons">
+        <button class="degress__button" [class.degress__button--active]="isMetricFormat" (click)="setCelsius(true)">C</button>
+        <button class="degress__button" [class.degress__button--active]="!isMetricFormat" (click)="setCelsius(false)">F</button>
+      </div>
     </div>
   </div>
-  
-  <div class="degress__container">
-    <span class="degress__label">º</span>
-    <div class="degress__buttons">
-      <button class="degress__button" [class.degress__button--active]="isCelsiusFormat" (click)="setCelsius(true)">C</button>
-      <button class="degress__button" [class.degress__button--active]="!isCelsiusFormat" (click)="setCelsius(false)">F</button>
+  <div class="wrapper__middle">
+    <div class="weather__container">
+      <div class="weather__icon weather__icon--{{ currentWeatherData?.weather[0].icon }}"></div>
+      <div class="weather__degress">{{ currentWeatherData?.main.temp | number: '1.0-0' }}</div>
+      <div class="weather__details">{{ currentWeatherData?.weather[0].description }}</div>
     </div>
   </div>
-  
-  <div class="weather__container">
-    <div class="weather__icon weather__icon--{{ currentWeatherData?.weather[0].icon }}"></div>
-    <div class="weather__degress">{{ currentWeatherData?.main.temp | number: '1.0-0' }}</div>
-    <div class="weather__details">{{ currentWeatherData?.weather[0].description }}</div>
-  </div>
-  
-  <div class="details__container">
-    <div class="details__item">
-      <div class="details__label">Ветер</div>
-      <div class="details__text" *ngIf="currentWeatherData?.wind">{{ currentWeatherData.wind.speed | number: '1.0-0' }} м/c, {{ getWindLocaleByDeg(currentWeatherData?.wind.deg) }}</div>
-    </div>
-    <div class="details__item">
-      <div class="details__label">Давление</div>
-      <div class="details__text" *ngIf="currentWeatherData?.main">{{ currentWeatherData.main.pressure }} мм рт. ст.</div>
-    </div>
-    <div class="details__item">
-      <div class="details__label">Влажность</div>
-      <div class="details__text" *ngIf="currentWeatherData?.main">{{ currentWeatherData.main.humidity }}%</div>
-    </div>
-    <div class="details__item">
-      <div class="details__label">Вероятность дождя</div>
-      <div class="details__text">~%</div>
+  <div class="wrapper__bottom">
+    <div class="details__container">
+      <div class="details__item">
+        <div class="details__label">Ветер</div>
+        <div class="details__text" *ngIf="currentWeatherData?.wind">
+          {{ currentWeatherData.wind.speed | number: '1.0-0' }}
+          {{ isMetricFormat ? 'м/c' : 'миль/ч' }},
+          {{ getWindLocaleByDeg(currentWeatherData?.wind.deg) }}</div>
+      </div>
+      <div class="details__item">
+        <div class="details__label">Давление</div>
+        <div class="details__text" *ngIf="currentWeatherData?.main">{{ currentWeatherData.main.pressure/1.333 | number: '1.0-0' }} мм рт. ст.</div>
+      </div>
+      <div class="details__item">
+        <div class="details__label">Влажность</div>
+        <div class="details__text" *ngIf="currentWeatherData?.main">{{ currentWeatherData.main.humidity }}%</div>
+      </div>
+      <div class="details__item">
+        <div class="details__label">Вероятность дождя</div>
+        <div class="details__text">~%</div>
+      </div>
     </div>
   </div>
 </div>

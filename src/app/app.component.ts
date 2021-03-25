@@ -9,7 +9,7 @@ import { IWeatherData } from './interfaces';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-  public isCelsiusFormat: boolean = true;
+  public isMetricFormat: boolean = true;
   public isCitySearchActive: boolean = false;
   public currentWeatherData: IWeatherData;
   public currentCity: string = '';
@@ -26,9 +26,9 @@ export class AppComponent implements OnInit {
     this.loadCurrentGeoWeather();
   }
 
-  public setCelsius(isCelsuis: boolean) {
-    this.isCelsiusFormat = isCelsuis;
-    this.weatherService.unitsChanges$.next(isCelsuis ? 'metric' : 'imperial');
+  public setCelsius(isMetric: boolean) {
+    this.isMetricFormat = isMetric;
+    this.weatherService.unitsChanges$.next(isMetric ? 'metric' : 'imperial');
     this.currentCity ? this.loadCityWeather(this.currentCity) : this.loadCurrentGeoWeather();
   }
   
